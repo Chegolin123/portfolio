@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Алексей Чеголин — Fullstack & AI</title>
+<meta name="description" content="Алексей Чеголин — fullstack-разработчик. IT-инфраструктура, веб-разработка и внедрение ИИ. Москва."/>
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          background: "#020617",
+          surface: "#0f172a",
+          "on-surface": "#f8fafc",
+          "text-dim": "#94a3b8",
+          "accent-primary": "#b4c5ff",
+          "accent-2": "#d2bbff",
+          "accent-3": "#4cd7f6",
+          "border-subtle": "rgba(255,255,255,0.08)",
+        },
+        fontFamily: {
+          sans: ["Inter", "sans-serif"],
+          mono: ["'JetBrains Mono'", "monospace"],
+        },
+        spacing: {
+          gutter: "1.5rem",
+          "container-max": "1200px",
+          "section-desktop": "8rem",
+          "section-mobile": "4rem",
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #020617;
+    color: #f8fafc;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .font-mono { font-family: "JetBrains Mono", monospace; }
+
+  /* ---------- ANIMATED BACKGROUND BLOBS ---------- */
+  .bg-blobs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform; }
+  .blob-1 { width: 540px; height: 540px; background: radial-gradient(circle, rgba(37,99,235,0.55), transparent 70%); top: -160px; left: -120px; animation: drift1 24s ease-in-out infinite; }
+  .blob-2 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(124,58,237,0.45), transparent 70%); top: 35%; right: -140px; animation: drift2 28s ease-in-out infinite; }
+  .blob-3 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(6,182,212,0.4), transparent 70%); bottom: -120px; left: 30%; animation: drift3 32s ease-in-out infinite; }
+  @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(120px,80px) scale(1.1);} 66%{transform:translate(60px,160px) scale(0.95);} }
+  @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-140px,100px) scale(1.15);} }
+  @keyframes drift3 { 0%,100%{transform:translate(0,0) scale(1);} 40%{transform:translate(100px,-120px) scale(1.1);} 70%{transform:translate(-80px,-60px) scale(0.9);} }
+
+  .text-glow { text-shadow: 0 0 40px rgba(180,197,255,0.35); }
+
+  /* ---------- HERO PORTRAIT (transparent PNG) ---------- */
+  .hero-portrait-wrap { position: relative; display: flex; justify-content: center; align-items: center; }
+  .hero-portrait-wrap::before {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: 78%; height: 78%; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(124,58,237,0.55) 0%, rgba(37,99,235,0.35) 40%, transparent 72%);
+    filter: blur(55px); z-index: 0;
+    animation: portraitGlow 6s ease-in-out infinite alternate;
+  }
+  @keyframes portraitGlow { 0%{opacity:0.5; transform:translate(-50%,-50%) scale(0.92);} 100%{opacity:0.8; transform:translate(-50%,-50%) scale(1.08);} }
+  .hero-portrait {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 440px;
+    object-fit: contain;
+    filter: drop-shadow(0 30px 50px rgba(2,6,23,0.7));
+    animation: floatY 7s ease-in-out infinite;
+  }
+  @keyframes floatY { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
+  .editorial-line { height: 1px; background: linear-gradient(90deg, rgba(180,197,255,0.5) 0%, transparent 100%); }
+  .section-number { -webkit-text-stroke: 1px rgba(255,255,255,0.08); color: transparent; font-size: 9rem; line-height: 1; font-weight: 800; }
+
+  /* ---------- GLASS CARDS ---------- */
+  .glass-card {
+    background: rgba(255,255,255,0.025);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+  }
+  .glass-card:hover {
+    border-color: rgba(180,197,255,0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(37,99,235,0.12);
+    background: rgba(255,255,255,0.04);
+  }
+  .glass-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #2563eb, #7c3aed, #06b6d4);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.45s ease;
+  }
+  .glass-card:hover::before { transform: scaleX(1); }
+
+  .accent-dot {
+    width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+    background: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.2);
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px rgba(16,185,129,0.2);} 50%{box-shadow:0 0 0 9px rgba(16,185,129,0);} }
+
+  /* gradient text */
+  .grad-text {
+    background: linear-gradient(135deg, #b4c5ff 0%, #4cd7f6 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .grad-text-2 {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* buttons */
+  .btn-primary {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff; box-shadow: 0 8px 24px rgba(37,99,235,0.35);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  }
+  .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 36px rgba(124,58,237,0.45); }
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(10px); transition: all 0.3s ease;
+  }
+  .btn-ghost:hover { border-color: #b4c5ff; color: #b4c5ff; transform: translateY(-3px); }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .blob { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+
+<body class="font-sans selection:bg-accent-primary/30">
+
+<!-- ANIMATED BLOBS -->
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- ============ HEADER / NAV ============ -->
+<header class="fixed top-0 w-full z-50 bg-background/60 backdrop-blur-xl border-b border-white/5">
+  <div class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+    <nav class="hidden md:flex gap-10">
+      <a class="text-text-dim hover:text-white transition-colors text-xs font-bold tracking-widest uppercase font-mono" href="#about">Обо мне</a>
+      <a class="text-text-dim hover:text-white transition-colors text-xs font-bold tracking-widest uppercase font-mono" href="#stack">Стек</a>
+      <a class="text-text-dim hover:text-white transition-colors text-xs font-bold tracking-widest uppercase font-mono" href="#ai">ИИ</a>
+      <a class="text-text-dim hover:text-white transition-colors text-xs font-bold tracking-widest uppercase font-mono" href="#contact">Контакты</a>
+    </nav>
+    <a class="btn-primary px-6 py-2.5 text-xs font-bold rounded-full uppercase tracking-wider" href="https://t.me/NoWayWhile">Связаться</a>
+  </div>
+</header>
+
+<main class="relative z-10">
+
+<!-- ============ HERO ============ -->
+<section class="relative min-h-screen flex items-center overflow-hidden pt-20" id="hero">
+  <div class="relative z-10 px-gutter max-w-container-max mx-auto w-full">
+    <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+      <!-- LEFT: text -->
+      <div class="space-y-10">
+        <div class="space-y-7 reveal">
+          <div class="flex items-center gap-4">
+            <div class="h-px w-12 bg-accent-primary"></div>
+            <span class="text-accent-primary text-xs font-bold tracking-[0.3em] uppercase font-mono flex items-center gap-3">
+              <span class="accent-dot"></span> Открыт к сотрудничеству
+            </span>
+          </div>
+          <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-glow">
+            Алексей <br/><span class="grad-text">Чеголин</span>
+          </h1>
+          <p class="text-text-dim text-lg md:text-xl leading-relaxed font-light max-w-lg">
+            Fullstack-разработчик с практическим опытом в IT-инфраструктуре и технологиях искусственного интеллекта.
+          </p>
+        </div>
+
+        <!-- STATS -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden glass-card reveal" style="padding:0;">
+          <div class="bg-background/40 backdrop-blur-md p-6 text-center">
+            <div class="text-4xl font-black grad-text mb-1" data-target="4">0</div>
+            <div class="text-text-dim text-[11px] font-bold uppercase tracking-widest font-mono">Курс</div>
+          </div>
+          <div class="bg-background/40 backdrop-blur-md p-6 text-center">
+            <div class="text-4xl font-black grad-text mb-1" data-target="6">0</div>
+            <div class="text-text-dim text-[11px] font-bold uppercase tracking-widest font-mono">Групп стека</div>
+          </div>
+          <div class="bg-background/40 backdrop-blur-md p-6 text-center">
+            <div class="text-4xl font-black grad-text mb-1" data-target="7">0</div>
+            <div class="text-text-dim text-[11px] font-bold uppercase tracking-widest font-mono">ИИ-направлений</div>
+          </div>
+          <div class="bg-background/40 backdrop-blur-md p-6 text-center">
+            <div class="text-4xl font-black grad-text mb-1" data-target="20" data-suffix="+">0</div>
+            <div class="text-text-dim text-[11px] font-bold uppercase tracking-widest font-mono">Технологий</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4 reveal">
+          <a class="btn-primary px-9 py-4 font-bold rounded-full text-sm uppercase tracking-widest" href="https://t.me/NoWayWhile">Написать в Telegram</a>
+          <a class="btn-ghost px-9 py-4 font-bold rounded-full text-sm uppercase tracking-widest" href="tel:+79932006551">+7 993 200-65-51</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: portrait -->
+      <div class="hero-portrait-wrap reveal w-full mx-auto md:mx-0 md:ml-auto">
+        <img class="hero-portrait" src="foto-Photoroom.png" alt="Алексей Чеголин"/>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- scroll hint -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-text-dim/60 text-xs font-mono tracking-widest uppercase animate-bounce">scroll ↓</div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="py-section-desktop md:py-section-desktop py-24 md:py-32 relative" id="about">
+  <div class="px-gutter max-w-container-max mx-auto">
+    <div class="grid md:grid-cols-12 gap-12 md:gap-16 items-start">
+      <div class="md:col-span-5 relative reveal">
+        <div class="section-number absolute -top-16 -left-8 select-none hidden md:block">01</div>
+        <h2 class="text-xs font-bold tracking-[0.4em] uppercase text-text-dim mb-8 relative z-10 font-mono">О себе</h2>
+        <p class="text-3xl md:text-4xl leading-tight font-bold text-on-surface relative z-10">
+          Инженерная база и <span class="grad-text">продуктовое мышление</span> — от серверов до ИИ.
+        </p>
+      </div>
+      <div class="md:col-span-7 space-y-8 pt-2 reveal">
+        <div class="editorial-line mb-6"></div>
+        <p class="text-lg leading-relaxed text-text-dim">
+          Студент 4 курса по специальности «веб-разработка». Fullstack-разработчик с практическим опытом работы с IT-инфраструктурой: администрирование серверов на дистрибутивах Linux, работа с различными СУБД, настройка IP-камер и систем видеонаблюдения.
+        </p>
+        <p class="text-lg leading-relaxed text-text-dim">
+          Опыт охватывает как разработку, так и инфраструктурные задачи — то есть основной профиль деятельности компании. Это позволяет не только подключить ИИ, но и довести его до продукта: интерфейс, бэкенд, деплой и сопровождение.
+        </p>
+        <div class="grid grid-cols-2 gap-8 py-8 border-y border-white/5">
+          <div>
+            <div class="text-4xl font-black grad-text mb-1">4 года</div>
+            <div class="text-text-dim text-xs font-bold uppercase tracking-widest font-mono">в веб-разработке</div>
+          </div>
+          <div>
+            <div class="text-4xl font-black grad-text mb-1">Москва</div>
+            <div class="text-text-dim text-xs font-bold uppercase tracking-widest font-mono">локация</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TECH STACK ============ -->
+<section class="py-24 md:py-32 relative" id="stack">
+  <div class="px-gutter max-w-container-max mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 reveal">
+      <div class="max-w-xl">
+        <h2 class="text-5xl md:text-6xl font-black tracking-tighter mb-5 italic grad-text-2">Стек</h2>
+        <p class="text-text-dim text-lg">Чем владею — инструменты для создания отказоустойчивых и интеллектуальных продуктов.</p>
+      </div>
+      <div class="text-accent-primary font-bold text-xs tracking-widest uppercase font-mono pb-2">Skill Matrix</div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- card -->
+      <div class="glass-card rounded-2xl p-8 relative overflow-hidden reveal">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-accent-primary font-mono text-sm tracking-widest">01</span>
+          <span class="material-symbols-outlined text-accent-primary text-2xl" style="font-variation-settings: 'wght' 300;">code</span>
+        </div>
+        <h3 class="text-base font-bold uppercase tracking-widest mb-5 text-white">Frontend</h3>
+        <p class="text-text-dim text-sm leading-relaxed">React 18, Next.js 14, TypeScript, Tailwind, Three.js, Framer Motion</p>
+      </div>
+      <div class="glass-card rounded-2xl p-8 relative overflow-hidden reveal">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-accent-primary font-mono text-sm tracking-widest">02</span>
+          <span class="material-symbols-outlined text-accent-primary text-2xl" style="font-variation-settings: 'wght' 300;">dns</span>
+        </div>
+        <h3 class="text-base font-bold uppercase tracking-widest mb-5 text-white">Backend</h3>
+        <p class="text-text-dim text-sm leading-relaxed">Python / FastAPI, Node.js / Express, PHP</p>
+      </div>
+      <div class="glass-card rounded-2xl p-8 relative overflow-hidden reveal">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-accent-primary font-mono text-sm tracking-widest">03</span>
+          <span class="material-symbols-outlined text-accent-3 text-2xl" style="font-variation-settings: 'wght' 300;">database</span>
+        </div>
+        <h3 class="text-base font-bold uppercase tracking-widest mb-5 text-white">Базы данных</h3>
+        <p class="text-text-dim text-sm leading-relaxed">PostgreSQL 16, MySQL 8, SQLite, Redis; SQLAlchemy, Alembic</p>
+      </div>
+      <div class="glass-card rounded-2xl p-8 relative overflow-hidden reveal">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-accent-primary font-mono text-sm tracking-widest">04</span>
+          <span class="material-symbols-outlined text-accent-primary text-2xl" style="font-variation-settings: 'wght' 300;">settings_suggest</span>
+        </div>
+        <h3 class="text-base font-bold uppercase tracking-widest mb-5 text-white">DevOps / Инфра</h3>
+        <p class="text-text-dim text-sm leading-relaxed">Docker, Nginx, Linux, Celery, Cloudflare</p>
+      </div>
+      <div class="glass-card rounded-2xl p-8 relative overflow-hidden reveal">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-accent-primary font-mono text-sm tracking-widest">05</span>
+          <span class="material-symbols-outlined text-accent-2 text-2xl" style="font-variation-settings: 'wght' 300;">send</span>
+        </div>
+        <h3 class="text-base font-bold uppercase tracking-widest mb-5 text-white">Telegram</h3>
+        <p class="text-text-dim text-sm leading-relaxed">Bot API, aiogram, Mini Apps</p>
+      </div>
+      <div class="glass-card rounded-2xl p-8 relative overflow-hidden reveal">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-accent-primary font-mono text-sm tracking-widest">06</span>
+          <span class="material-symbols-outlined text-accent-3 text-2xl" style="font-variation-settings: 'wght' 300;">neurology</span>
+        </div>
+        <h3 class="text-base font-bold uppercase tracking-widest mb-5 text-white">AI / LLM</h3>
+        <p class="text-text-dim text-sm leading-relaxed">DeepSeek API, OpenAI SDK, промпт-инжиниринг</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AI DIRECTIONS ============ -->
+<section class="py-24 md:py-32 relative" id="ai">
+  <div class="px-gutter max-w-container-max mx-auto">
+    <div class="mb-16 text-center md:text-left reveal">
+      <div class="flex items-center gap-4 mb-4 justify-center md:justify-start">
+        <div class="h-px w-12 bg-accent-3"></div>
+        <span class="text-accent-3 text-xs font-bold tracking-[0.3em] uppercase font-mono">Что готов внедрить</span>
+      </div>
+      <h2 class="text-5xl md:text-7xl font-black tracking-tighter mb-4 text-glow">Применение ИИ</h2>
+      <div class="editorial-line w-32 mx-auto md:mx-0"></div>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <div class="glass-card rounded-2xl p-7 flex gap-6 items-start reveal group">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg,#2563eb,#7c3aed);">01</div>
+        <div>
+          <h3 class="text-xl font-bold mb-1.5 group-hover:text-accent-primary transition-colors">ИИ-ассистент для Service Desk</h3>
+          <p class="text-text-dim leading-relaxed text-sm md:text-base">На FastAPI + PostgreSQL: категоризация заявок и ответы по базе знаний через LLM. Управляющий интерфейс на React / Next.js.</p>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-7 flex gap-6 items-start reveal group">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg,#2563eb,#7c3aed);">02</div>
+        <div>
+          <h3 class="text-xl font-bold mb-1.5 group-hover:text-accent-primary transition-colors">Telegram Mini App для клиентов</h3>
+          <p class="text-text-dim leading-relaxed text-sm md:text-base">Подача и отслеживание заявок, контроль статусов и SLA, взаимодействие с инженерами.</p>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-7 flex gap-6 items-start reveal group">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg,#2563eb,#7c3aed);">03</div>
+        <div>
+          <h3 class="text-xl font-bold mb-1.5 group-hover:text-accent-primary transition-colors">Чат-бот первой линии поддержки</h3>
+          <p class="text-text-dim leading-relaxed text-sm md:text-base">На aiogram — снятие типовой нагрузки с инженеров, ответы по частым вопросам.</p>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-7 flex gap-6 items-start reveal group">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg,#2563eb,#7c3aed);">04</div>
+        <div>
+          <h3 class="text-xl font-bold mb-1.5 group-hover:text-accent-primary transition-colors">Аналитика инцидентов</h3>
+          <p class="text-text-dim leading-relaxed text-sm md:text-base">Обработка логов Zabbix / PRTG через LLM для выявления аномалий и типовых причин.</p>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-7 flex gap-6 items-start reveal group">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg,#2563eb,#7c3aed);">05</div>
+        <div>
+          <h3 class="text-xl font-bold mb-1.5 group-hover:text-accent-primary transition-colors">Computer Vision для видеонаблюдения</h3>
+          <p class="text-text-dim leading-relaxed text-sm md:text-base">Распознавание объектов и событий с IP-камер, аналитика по зонам и инцидентам.</p>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-7 flex gap-6 items-start reveal group">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg,#2563eb,#7c3aed);">06</div>
+        <div>
+          <h3 class="text-xl font-bold mb-1.5 group-hover:text-accent-primary transition-colors">Внутренние ассистенты для инженеров</h3>
+          <p class="text-text-dim leading-relaxed text-sm md:text-base">Поддержка по регламентам, документации и конфигурациям.</p>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-7 flex gap-6 items-start reveal group">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg,#06b6d4,#2563eb);">07</div>
+        <div>
+          <h3 class="text-xl font-bold mb-1.5 group-hover:text-accent-3 transition-colors">Развёртывание локальных LLM в контуре клиента</h3>
+          <p class="text-text-dim leading-relaxed text-sm md:text-base">Для конфиденциальности данных и работы в изолированных сетях — актуально для требований ФЗ-152.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUALIFICATION ============ -->
+<section class="py-24 md:py-32 relative">
+  <div class="px-gutter max-w-container-max mx-auto">
+    <div class="flex items-center gap-4 mb-8 reveal">
+      <div class="h-px w-12 bg-accent-primary"></div>
+      <span class="text-accent-primary text-xs font-bold tracking-[0.3em] uppercase font-mono">Квалификация в области ИИ</span>
+    </div>
+    <div class="glass-card rounded-2xl p-8 md:p-12 reveal relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-1 h-full" style="background:linear-gradient(180deg,#2563eb,#7c3aed,#06b6d4);"></div>
+      <div class="space-y-5 text-base md:text-lg leading-relaxed text-on-surface/90 pl-3">
+        <p>Специализация — прикладная интеграция языковых моделей: подключение LLM через API (DeepSeek, OpenAI), промпт-инжиниринг, обработка структурированных ответов. Для задач класса ассистенты / чат-боты / RAG этого достаточно для полноценного продукта.</p>
+        <p>Глубокое обучение собственных моделей в круг задач не входит — используются готовые решения. Помимо облачных моделей, знаком с подходом к развёртыванию локальных LLM (Ollama, vLLM, llama.cpp) и открытыми моделями с поддержкой русского (Qwen, Saiga), готов взять эту задачу с перспективой дообучения под нужды компании.</p>
+        <p>Наряду с этим — уверенная инженерная база (серверы, Linux, БД, видеонаблюдение) и сильный frontend. Это позволяет не только подключить ИИ, но и довести его до продукта: интерфейс, бэкенд, деплой, сопровождение.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / CONTACT ============ -->
+<section class="relative py-24 md:py-40 overflow-hidden" id="contact">
+  <div class="relative z-10 px-gutter max-w-container-max mx-auto text-center reveal">
+    <h2 class="text-5xl md:text-8xl font-black tracking-tighter mb-8 italic grad-text">Свяжемся.</h2>
+    <p class="text-text-dim max-w-xl mx-auto mb-12 text-lg md:text-xl font-light">
+      Буду рад обсудить варианты сотрудничества — в том числе по текущим задачам компании, не связанным с ИИ.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+      <a class="btn-primary px-12 py-5 font-black rounded-full text-base uppercase tracking-widest w-full sm:w-auto" href="https://t.me/NoWayWhile">Telegram · @NoWayWhile</a>
+      <a class="text-white border-b-2 border-white/30 hover:border-accent-primary px-4 py-2 font-bold text-lg transition-all" href="tel:+79932006551">+7 993 200-65-51</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="py-16 px-gutter border-t border-white/5 bg-background relative z-10">
+  <div class="max-w-container-max mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
+      <div>
+        <div class="text-3xl font-black tracking-tighter mb-3 italic grad-text-2">Чеголин.dev</div>
+        <p class="text-text-dim text-xs font-bold uppercase tracking-[0.2em] font-mono">Fullstack & AI · Москва</p>
+      </div>
+      <div class="grid grid-cols-2 gap-12">
+        <div class="space-y-3">
+          <p class="text-xs font-black uppercase text-accent-primary tracking-widest font-mono">Связь</p>
+          <a class="block text-sm text-text-dim hover:text-white transition-colors" href="https://t.me/NoWayWhile">Telegram</a>
+          <a class="block text-sm text-text-dim hover:text-white transition-colors" href="tel:+79932006551">Телефон</a>
+        </div>
+        <div class="space-y-3">
+          <p class="text-xs font-black uppercase text-accent-primary tracking-widest font-mono">Навигация</p>
+          <a class="block text-sm text-text-dim hover:text-white transition-colors" href="#about">Обо мне</a>
+          <a class="block text-sm text-text-dim hover:text-white transition-colors" href="#ai">ИИ-направления</a>
+        </div>
+      </div>
+    </div>
+    <div class="editorial-line opacity-20 mb-6"></div>
+    <div class="flex flex-col md:flex-row justify-between text-[10px] uppercase font-bold tracking-[0.3em] text-white/30 font-mono">
+      <span>Алексей Чеголин · Москва, Россия</span>
+      <span>© 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- Reveal on scroll ----
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        // counters
+        entry.target.querySelectorAll("[data-target]").forEach(animateCounter);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+
+  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+  // also catch standalone counters/bars inside revealed parents
+  document.querySelectorAll("[data-target]").forEach((el) => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { animateCounter(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.4 });
+    io.observe(el);
+  });
+
+  function animateCounter(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = "1";
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || "";
+    const duration = 1500;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // ---- Parallax blobs on cursor ----
+  const blobs = document.querySelectorAll(".blob");
+  document.addEventListener("mousemove", (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+    const y = (e.clientY / window.innerHeight - 0.5) * 2;
+    blobs.forEach((blob, i) => {
+      const depth = (i + 1) * 14;
+      blob.style.translate = `${x * depth}px ${y * depth}px`;
+    });
+  });
+</script>
+
+</body>
+</html>

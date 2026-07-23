@@ -1,0 +1,20 @@
+# Зависимости и сборка
+node_modules/
+.next/
+dist/
+build/
+
+# Системное
+.DS_Store
+Thumbs.db
+.zcode/
+
+# Временные/устаревшие файлы проекта
+hero-photo.jpg
+site-deploy.zip
+*.zip
+
+# Окружение
+.env
+.env.local
+.env.*.local
